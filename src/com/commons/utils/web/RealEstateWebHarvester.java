@@ -29,7 +29,7 @@ private static final String BASE_URL = "http://www.realestate.com.au/";
 		selenium.click("id=myrea-sign-in");
 		selenium.waitForPageToLoad("5000");
 		selenium.type("id=emailInp", "eric-lee-83@hotmail.com");
-		selenium.type("id=pass", "password2014");
+		selenium.type("id=pass", "");
 		selenium.click("css=button.rui-button-brand");
 		selenium.waitForPageToLoad("5000");
 		selenium.click("id=goback");
