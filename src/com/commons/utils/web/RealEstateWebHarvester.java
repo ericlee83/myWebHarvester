@@ -22,5 +22,30 @@ private static final String BASE_URL = "http://www.realestate.com.au/";
 	public RealEstateWebHarvester() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public void start() throws Exception{
+		selenium.start();
+		selenium.open(SEARCH_URL);
+		selenium.click("id=myrea-sign-in");
+		selenium.waitForPageToLoad("5000");
+		selenium.type("id=emailInp", "eric-lee-83@hotmail.com");
+		selenium.type("id=pass", "password2014");
+		selenium.click("css=button.rui-button-brand");
+		selenium.waitForPageToLoad("5000");
+		selenium.click("id=goback");
+		selenium.waitForPageToLoad("10000");
+		selenium.type("id=where", "Burwood, NSW 2134");
+		selenium.click("id=includeSurrounding");
+		selenium.click("id=searchBtn");
+		selenium.waitForPageToLoad("5000");
+	}
+	
+	public void close() {
+		if (null != seleniumServer) {
+			seleniumServer.stop();
+			seleniumServer = null;
+		}
+		selenium.stop();
+	}
 
 }
