@@ -1,56 +1,65 @@
 package com.commons.utils.web;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
-import org.openqa.selenium.server.SeleniumServer;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.commons.value.RealEstateValue;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.Selenium;
 
 public class RealEstateWebHarvester {
 	
-private static final String BASE_URL = "http://www.realestate.com.au/";
-	
-	private static final String SELENIUM_HOST = "localhost";
-	private static final int SELENIUM_PORT = 4444;
-	private static final String SELENIUM_BROWSER = "*firefox";
+	private static final String BASE_URL = "http://www.realestate.com.au/";
 	
 	private static final String SEARCH_URL = BASE_URL+"buy";
 	
-	private Selenium selenium = new DefaultSelenium(SELENIUM_HOST, SELENIUM_PORT,SELENIUM_BROWSER, BASE_URL);
-
-	private SeleniumServer seleniumServer;
 	
-	ResourceBundle myResources = ResourceBundle.getBundle(RealEstateValue.REALESTATE_PROPERTIES);
+	private WebDriver driver = new FirefoxDriver();
+	private WebDriverWait wait = new WebDriverWait(driver, 5);
+	ResourceBundle myResources ;
 	
 	public RealEstateWebHarvester() {
 		// TODO Auto-generated constructor stub
+		myResources= ResourceBundle.getBundle(RealEstateValue.REALESTATE_PROPERTIES);
 	}
 	
 	public void start() throws Exception{
-		selenium.start();
-		selenium.open(SEARCH_URL);
-		selenium.click("id=myrea-sign-in");
-		selenium.waitForPageToLoad("5000");
-		selenium.type("id=emailInp", myResources.getString(RealEstateValue.USER_EMAIL));
-		selenium.type("id=pass", myResources.getString(RealEstateValue.USER_PASS));
-		selenium.click("css=button.rui-button-brand");
-		selenium.waitForPageToLoad("5000");
-		selenium.click("id=goback");
-		selenium.waitForPageToLoad("10000");
-		selenium.type("id=where", "Burwood, NSW 2134");
-		selenium.click("id=includeSurrounding");
-		selenium.click("id=searchBtn");
-		selenium.waitForPageToLoad("5000");
+		driver.get(SEARCH_URL);
+		/*driver.findElement(By.id("myrea-sign-in")).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("emailInp")));
+		driver.findElement(By.id("emailInp")).sendKeys(myResources.getString(RealEstateValue.USER_EMAIL));
+		driver.findElement(By.id("pass")).sendKeys(myResources.getString(RealEstateValue.USER_PASS));
+		driver.findElement(By.cssSelector("button.rui-button-brand")).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("goback")));
+		driver.findElement(By.id("goback")).click();*/
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("where")));
+		driver.findElement(By.id("includeSurrounding")).click();
+		driver.findElement(By.id("where")).clear();
+		driver.findElement(By.id("where")).sendKeys("Burwood, NSW 2134");
+		driver.findElement(By.id("searchBtn")).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("propertyType")));
+		driver.findElement(By.id("propertyType")).click();
+		/*wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[type='checkbox']")));
+		List<WebElement> eList = driver.findElements(By.xpath("//input[type='checkbox'"));
+		for(WebElement e : eList){
+			if("unit apartment"==e.getAttribute("value")){
+				e.click();
+				break;
+			}
+		}*/
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='LMIDD_propertyType']/div[2]/dl/dd[3]/label")));
+		driver.findElement(By.xpath("////div[@id='LMIDD_propertyType']/div[2]/dl/dd[3]/label")).click();
+		driver.findElement(By.cssSelector("button.button.plusplus")).click();
+
 	}
 	
 	public void close() {
-		if (null != seleniumServer) {
-			seleniumServer.stop();
-			seleniumServer = null;
-		}
-		selenium.stop();
+		driver.close();
 	}
 
 }
