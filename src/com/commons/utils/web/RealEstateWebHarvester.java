@@ -30,13 +30,6 @@ public class RealEstateWebHarvester {
 	
 	public void start() throws Exception{
 		driver.get(SEARCH_URL);
-		/*driver.findElement(By.id("myrea-sign-in")).click();
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("emailInp")));
-		driver.findElement(By.id("emailInp")).sendKeys(myResources.getString(RealEstateValue.USER_EMAIL));
-		driver.findElement(By.id("pass")).sendKeys(myResources.getString(RealEstateValue.USER_PASS));
-		driver.findElement(By.cssSelector("button.rui-button-brand")).click();
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("goback")));
-		driver.findElement(By.id("goback")).click();*/
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("where")));
 		driver.findElement(By.id("includeSurrounding")).click();
 		driver.findElement(By.id("where")).clear();
@@ -44,22 +37,23 @@ public class RealEstateWebHarvester {
 		driver.findElement(By.id("searchBtn")).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("propertyType")));
 		driver.findElement(By.id("propertyType")).click();
-		/*wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[type='checkbox']")));
-		List<WebElement> eList = driver.findElements(By.xpath("//input[type='checkbox'"));
-		for(WebElement e : eList){
-			if("unit apartment"==e.getAttribute("value")){
-				e.click();
-				break;
-			}
-		}*/
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='LMIDD_propertyType']/div[2]/dl/dd[3]/label")));
-		driver.findElement(By.xpath("////div[@id='LMIDD_propertyType']/div[2]/dl/dd[3]/label")).click();
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='ddCb_propertyType_2']")));
+		driver.findElement(By.xpath("//input[@type='checkbox' and @value='unit apartment']")).click();
 		driver.findElement(By.cssSelector("button.button.plusplus")).click();
+		List<WebElement> eList = driver.findElements(By.xpath("//div[starts-with(@id,'results_')]"));
+		WebElement temp;
+		for(WebElement e : eList){
+			temp = e.findElement(By.cssSelector("a.name"));
+			if(temp != null){
+				System.out.println(temp.getText()+"------>"+temp.getAttribute("href"));
+			}
+		}
 
 	}
 	
 	public void close() {
-		driver.close();
+		//driver.close();
 	}
 
 }
